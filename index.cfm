@@ -175,6 +175,10 @@
         function initWebSocket() {
             let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
 
+            socket.sendMessage(JSON.stringify({
+                type: "test",
+            }));
+
             socket.onmessage = function(event) {
                 console.log("Message received: " + event.data);
                 const messageData = JSON.parse(event.data);

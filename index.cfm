@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>My ColdFusion Chat Page</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             flex-direction: column;

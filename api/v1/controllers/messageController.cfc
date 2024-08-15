@@ -150,7 +150,7 @@
             })>
 
         <cfscript>
-            wsPublish("chatChannel", messageData)
+            wsSendMessage(messageData)
         </cfscript>
 
         <cfreturn data>

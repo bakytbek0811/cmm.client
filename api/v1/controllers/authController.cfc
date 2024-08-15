@@ -47,6 +47,19 @@
         <cfset jwtToken = "">
 
         <cfscript>
+            function generateRandomToken(len) {
+                var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var token = "";
+                
+                for (var i = 1; i <= len; i++) {
+                    token &= characters.charAt(randRange(1, len(characters)));
+                }
+                
+                return token;
+            }
+
+            var token = generateRandomToken(64);
+            
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
             jedis.set("cmm:accessToken:" & token, user.id);

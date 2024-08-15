@@ -58,7 +58,6 @@
             <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
         </cfif>
 
-        <cfset jwt = new lib.jwt.models.jwt()>
         <cfset headers = getHTTPRequestData().headers>
 
         <cfscript>

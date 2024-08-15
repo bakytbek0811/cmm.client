@@ -192,6 +192,10 @@
             };
 
             socket.onopen = () => console.log("Connection established");
+
+            socket.onerror = (error) => {
+                console.error("WebSocket error:", error);
+            };
         }
 
         checkAuth();

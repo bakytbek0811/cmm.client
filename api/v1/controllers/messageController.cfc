@@ -149,9 +149,9 @@
                 "createdAt" = message.created_at
             })>
 
-        <cfscript>
-            wsSendMessage(messageData)
-        </cfscript>
+        <cfloop collection="#APPLICATION.connectedClients#" item="key">
+            <cfset wsSendMessage(APPLICATION.connectedClients[key], serializeJSON(messageData))>
+        </cfloop>
 
         <cfreturn data>
     </cffunction>

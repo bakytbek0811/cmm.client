@@ -1,5 +1,5 @@
 <cfcomponent rest="true" restPath="auth">
-    <cffunction name="checkAuth" httpMethod="GET" restPath="check-auth" access="remote" returnType="boolean">
+    <cffunction name="checkAuth" httpMethod="GET" restPath="check-auth" access="remote" returnType="boolean" produces="text/plain">
         <cftry>
             <cfset headers = getHTTPRequestData().headers>
 

@@ -11,12 +11,14 @@
                     jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
                     tokenData = jedis.get("cmm:accessToken:" & token);
-                    jedis.close();
 
                     if (tokenData) {
+                        jedis.close();
+
                         return true;
                     }
 
+                    jedis.close();
                 </cfscript>
             </cfif>
 

@@ -62,10 +62,15 @@
 
         <cfset token = "">
 
-        <cfif structKeyExists(headers, "Cookie")>
-            <cfset token = headers["Cookie"]>
-            <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
-        </cfif>
+        <cfset cookieString = headers["Cookie"]>
+        <cfset cookieParts = listToArray(cookieString, "; ")>
+
+        <cfloop array="#cookieParts#" index="part">
+            <cfif left(part, 12) eq "ACCESSTOKEN=">
+                <cfset token = replace(part, "ACCESSTOKEN=", "", "one")>
+                <cfbreak>
+            </cfif>
+        </cfloop>
 
         <cfset fromUserId = 0>
         

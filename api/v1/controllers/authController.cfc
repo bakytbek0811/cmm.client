@@ -4,10 +4,19 @@
             <cfset headers = getHTTPRequestData().headers>
 
             <cfif structKeyExists(headers, "Cookie")>
-                <cfset token = headers["Cookie"]>
-                <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
+                <cfset cookieString = headers["Cookie"]>
+                <cfset cookieParts = listToArray(cookieString, "; ")>
 
-                <cfscript>
+                <cfset token = "">
+
+                <cfloop array="#cookieParts#" index="part">
+                    <cfif left(part, 12) eq "ACCESSTOKEN=">
+                        <cfset token = replace(part, "ACCESSTOKEN=", "", "one")>
+                        <cfbreak>
+                    </cfif>
+                </cfloop>
+
+                <cfscript>                    
                     jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
                     tokenData = jedis.get("cmm:accessToken:" & token);

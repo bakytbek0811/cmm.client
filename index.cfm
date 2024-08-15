@@ -53,9 +53,20 @@
             padding: 10px;
             font-size: 16px;
         }
+
+        .authenticated {
+            display: none;
+        }
     </style>
 
     <script>
+         function showAuthenticatedContent() {
+            const elements = document.querySelectorAll('.authenticated');
+            elements.forEach(element => {
+                element.style.display = 'block';
+            });
+        }
+
         function login() {
             var username = document.getElementById("usernameInput").value;
             
@@ -73,6 +84,8 @@
             .then(response => response.text())
             .then(data => {
                 if (data === "true") {
+                    document.getElementById("authModal").style.display = "none"; // Скрыть модальное окно
+                    showAuthenticatedContent(); // Показать контент для авторизованных пользователей
                     location.reload(); // Перезагрузить страницу после успешной авторизации
                 } else {
                     alert("Authorization failed. Please try again.");
@@ -89,8 +102,9 @@
                 if (data === "false") {
                     document.getElementById("authModal").style.display = "block";
                 } else {
-                    displayAllMessages(); // Загружаем сообщения, если авторизация успешна
-                    initWebSocket(); // Инициализируем WebSocket соединение
+                    displayAllMessages();
+                    initWebSocket();
+                    showAuthenticatedContent();
                 }
             });
         }
@@ -184,10 +198,10 @@
     </script>
 </head>
 <body>
-    <main id="messagesList">
+    <main id="messagesList" class="authenticated">
         <p>Loading...</p>
     </main>
-    <footer>
+    <footer class="authenticated">
         <input type="text" id="messageInput" placeholder="Type your message..." required>
         <button id="sendButton" onClick="sendMessage()">Send</button>
     </footer>

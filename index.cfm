@@ -25,6 +25,7 @@
             background-color: #ccc;
             display: flex;
             align-items: center;
+            width: 100%;
         }
         input[type="text"] {
             width: 100%;
@@ -64,7 +65,7 @@
          function showAuthenticatedContent() {
             const elements = document.querySelectorAll('.authenticated');
             elements.forEach(element => {
-                element.style.display = 'flex';
+                element.style.display = 'block';
             });
         }
 

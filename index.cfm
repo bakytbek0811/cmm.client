@@ -36,6 +36,10 @@
     </style>
 
     <script>
+        function login() {
+            
+        }
+
         function sendMessage() {
             var message = document.getElementById("messageInput").value;
             

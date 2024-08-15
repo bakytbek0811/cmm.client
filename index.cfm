@@ -199,10 +199,12 @@
     <main id="messagesList" class="authenticated">
         <p>Loading...</p>
     </main>
-    <footer class="authenticated" style="width: 100%">
-        <input type="text" id="messageInput" placeholder="Type your message..." required>
-        <button id="sendButton" onClick="sendMessage()">Send</button>
-    </footer>
+    <div class="authenticated"> 
+        <footer style="width: 100%">
+            <input type="text" id="messageInput" placeholder="Type your message..." required>
+            <button id="sendButton" onClick="sendMessage()">Send</button>
+        </footer>
+    </div>
 
     <!-- Модальное окно для авторизации -->
     <div id="authModal">

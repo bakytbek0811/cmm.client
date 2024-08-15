@@ -50,6 +50,8 @@
     <cffunction httpMethod="POST" name="sendMessage" restPath="/send" access="remote" returnType="any" produces="application/json">
         <cfset httpRequestData = getHTTPRequestData()>
         <cfset data = deserializeJSON(httpRequestData.content)>
+        <cfdump var="#httpRequestData.content#" label="Request Content">
+        <cfabort>
 
         <cfset SetTimeZone("UTC")>
 

@@ -67,12 +67,14 @@
             <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
         </cfif>
 
+        <cfset fromUserId = 0>
+        
         <cfscript>
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
             fromUserId = jedis.get("cmm:accessToken:" & token);
 
-            if (!fromUserId) {
+            if (!fromUserId || fromUserId == 0) {
                 return {
                     status: 401,
                     message: "Unauthorized."

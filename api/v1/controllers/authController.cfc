@@ -58,7 +58,7 @@
                 return token;
             }
 
-            var token = generateRandomToken(20);
+            jwtToken = generateRandomToken(20);
             
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 

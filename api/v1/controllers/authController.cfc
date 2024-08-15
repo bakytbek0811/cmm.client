@@ -41,7 +41,7 @@
                 "iat" = Now()
             }>
 
-        <cfset jwt = createObject('component', '/opt/cmm.client/lib/jwt/models/jwt.cfc'())>
+        <cfset jwt = new lib.jwt.models.jwt()>
 
         <cfset jwtToken = jwt.encode(payload, "secret-key", "HS256")>
 

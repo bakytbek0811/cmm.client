@@ -70,6 +70,10 @@
                 <cfset fromUserId = jwtData.sub>
             </cfif>            
         <cfcatch>
+            <cfreturn {
+                status: 401,
+                message: "Unauthorized."
+            }>
         </cfcatch>
         </cftry>
 

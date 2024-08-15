@@ -60,6 +60,13 @@
 
         <cfset headers = getHTTPRequestData().headers>
 
+        <cfset token = "">
+
+        <cfif structKeyExists(headers, "Cookie")>
+            <cfset token = headers["Cookie"]>
+            <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
+        </cfif>
+
         <cfscript>
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 

@@ -1,4 +1,3 @@
-<!-- index.cfm -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,18 +32,70 @@
             padding: 10px 20px;
             font-size: 16px;
         }
+        #authModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        #authModal input[type="text"] {
+            margin-bottom: 10px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
     </style>
 
     <script>
         function login() {
+            var username = document.getElementById("usernameInput").value;
             
+            if (!username.trim()) {
+                return alert("Please enter a username");
+            }
+
+            fetch('http://94.247.135.81:8500/rest/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify({ username: username })
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "true") {
+                    location.reload(); // Перезагрузить страницу после успешной авторизации
+                } else {
+                    alert("Authorization failed. Please try again.");
+                }
+            });
+        }
+
+        function checkAuth() {
+            fetch('http://94.247.135.81:8500/rest/api/auth/check-auth', {
+                method: 'GET'
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "false") {
+                    document.getElementById("authModal").style.display = "block";
+                } else {
+                    displayAllMessages(); // Загружаем сообщения, если авторизация успешна
+                    initWebSocket(); // Инициализируем WebSocket соединение
+                }
+            });
         }
 
         function sendMessage() {
             var message = document.getElementById("messageInput").value;
             
             if (!message.trim()) {
-                return alert("Empty message")
+                return alert("Empty message");
             }
 
             fetch('http://94.247.135.81:8500/rest/api/messages/send', {
@@ -74,14 +125,14 @@
                 <p style="margin: 5px 0;">${message.content}</p>
             `;
 
-            return messageElement
+            return messageElement;
         }
 
         function displayAllMessages() {
             fetch('http://94.247.135.81:8500/rest/api/messages?limit=999999', {
                 method: 'GET'
             })
-            .then(data => data.json())
+            .then(response => response.json())
             .then(messages => {
                 const messagesList = document.getElementById("messagesList");
                 messagesList.innerHTML = ""; 
@@ -92,11 +143,9 @@
                     messagesList.appendChild(getMessageHtml(message));
                 }
 
-                scrollToMessagesListBottom()
-            })
+                scrollToMessagesListBottom();
+            });
         }
-
-        displayAllMessages()
 
         function scrollToMessagesListBottom() {
             document.getElementById("messagesList").scrollTo({
@@ -105,24 +154,29 @@
             });
         }
 
-        let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
+        function initWebSocket() {
+            let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
 
-        socket.onmessage = function(event) {
-            const messagesList = document.getElementById("messagesList");
-            const messageData = JSON.parse(event.data);
-            console.log(messageData)
+            socket.onmessage = function(event) {
+                const messagesList = document.getElementById("messagesList");
+                const messageData = JSON.parse(event.data);
+                console.log(messageData);
 
-            let existingMessage = document.getElementById(messageData.id);
+                let existingMessage = document.getElementById(messageData.id);
 
-            if (existingMessage) {
-                existingMessage.querySelector('p:last-child').textContent = messageData.content;
-            } else {
-                messagesList.appendChild(getMessageHtml(messageData));
-            }
-            scrollToMessagesListBottom()
+                if (existingMessage) {
+                    existingMessage.querySelector('p:last-child').textContent = messageData.content;
+                } else {
+                    messagesList.appendChild(getMessageHtml(messageData));
+                }
+                scrollToMessagesListBottom();
+            };
+
+            socket.onopen = () => console.log("Connection established");
         }
 
-        socket.onopen = () => console.log("Connection established");
+        // Проверка авторизации при загрузке страницы
+        checkAuth();
     </script>
 </head>
 <body>
@@ -133,5 +187,12 @@
         <input type="text" id="messageInput" placeholder="Type your message..." required>
         <button id="sendButton" onClick="sendMessage()">Send</button>
     </footer>
+
+    <!-- Модальное окно для авторизации -->
+    <div id="authModal">
+        <h2>Login</h2>
+        <input type="text" id="usernameInput" placeholder="Enter your username" required>
+        <button onClick="login()">Login</button>
+    </div>
 </body>
 </html>

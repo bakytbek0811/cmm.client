@@ -58,10 +58,10 @@
             <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
         </cfif>
 
+        <cfset jwt = new lib.jwt.models.jwt()>
+        <cfset headers = getHTTPRequestData().headers>
+        
         <cftry>
-            <cfset jwt = new lib.jwt.models.jwt()>
-            <cfset headers = getHTTPRequestData().headers>
-
             <cfif structKeyExists(headers, "Cookie")>
                 <cfset token = headers["Cookie"]>
                 <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>

@@ -85,6 +85,7 @@
             .then(data => {
                 document.getElementById("authModal").style.display = "none";
                 showAuthenticatedContent();
+                displayAllMessages();
             });
         }
 

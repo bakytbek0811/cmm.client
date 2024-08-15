@@ -62,7 +62,7 @@
             
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
-            jedis.set("cmm:accessToken:" & token, user.id);
+            jedis.set("cmm:accessToken:" & jwtToken, user.id);
 
             jedis.close();
         </cfscript>

@@ -58,22 +58,16 @@
             <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
         </cfif>
 
-        <cfset fromUserId = 1>
+        <cfset jwt = new lib.jwt.models.jwt()>
+        <cfset headers = getHTTPRequestData().headers>
 
-        <cftry>
-            <cfset jwt = new lib.jwt.models.jwt()>
-            <cfset headers = getHTTPRequestData().headers>
+        <cfif structKeyExists(headers, "Cookie")>
+            <cfset token = headers["Cookie"]>
+            <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
 
-            <cfif structKeyExists(headers, "Cookie")>
-                <cfset token = headers["Cookie"]>
-                <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
-
-                <cfset jwtData = jwt.decode(token, "secret-key", ["HS256"])>
-                <cfset fromUserId = jwtData.sub>
-            </cfif>            
-        <cfcatch>
-        </cfcatch>
-        </cftry>
+            <cfset jwtData = jwt.decode(token, "secret-key", ["HS256"])>
+            <cfset fromUserId = jwtData.sub>
+        </cfif>            
 
         <cfquery name="message" dataSource="chatMainDb">
             INSERT INTO messages (content, original_content, from_user_id, created_at)

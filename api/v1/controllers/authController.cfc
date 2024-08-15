@@ -52,13 +52,13 @@
                 var token = "";
                 
                 for (var i = 1; i <= len; i++) {
-                    token &= characters.charAt(randRange(1, len(characters)));
+                    token &= characters.charAt(randRange(1, len(characters)) - 1);
                 }
                 
                 return token;
             }
 
-            var token = generateRandomToken(64);
+            var token = generateRandomToken(20);
             
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 

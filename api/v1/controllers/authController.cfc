@@ -1,7 +1,7 @@
 <cfcomponent rest="true" restPath="auth">
     <cffunction name="checkAuth" httpMethod="GET" restPath="check-auth" access="remote" returnType="boolean">
         <cftry>
-            <cfset jwt = new "/opt/cmm.client/lib/jwt/models/jwt.cfc"()>
+            <cfset jwt = new lib.jwt.models.jwt()>
             <cfset headers = getHTTPRequestData().headers>
 
             <cfif structKeyExists(headers, "Cookie")>
@@ -41,7 +41,7 @@
                 "iat" = Now()
             }>
 
-        <cfset jwt = new lib.jwt.models.jwt()>
+        <cfset jwt = new '/opt/cmm.client/lib/jwt/models/jwt.cfc'()>
 
         <cfset jwtToken = jwt.encode(payload, "secret-key", "HS256")>
 

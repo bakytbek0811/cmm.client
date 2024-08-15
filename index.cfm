@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My ColdFusion Chat Page</title>
+    <title>ChatPage</title>
     <style>
         * {
             box-sizing: border-box;
@@ -176,15 +176,16 @@
             let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
 
             socket.onmessage = function(event) {
-                const messagesList = document.getElementById("messagesList");
+                console.log("Message received: " + event.data);
                 const messageData = JSON.parse(event.data);
-                console.log(messageData);
 
                 let existingMessage = document.getElementById(messageData.id);
 
                 if (existingMessage) {
                     existingMessage.querySelector('p:last-child').textContent = messageData.content;
                 } else {
+                    const messagesList = document.getElementById("messagesList");
+                    
                     messagesList.appendChild(getMessageHtml(messageData));
                 }
                 scrollToMessagesListBottom();
@@ -193,7 +194,6 @@
             socket.onopen = () => console.log("Connection established");
         }
 
-        // Проверка авторизации при загрузке страницы
         checkAuth();
     </script>
 </head>

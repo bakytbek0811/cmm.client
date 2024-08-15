@@ -9,7 +9,7 @@
         <cfset wsConfig = {
             channels = {
                 chatChannel = {
-                    listener = "handlers.WebSocketHandler" <!-- Путь к вашему WebSocketHandler.cfc -->
+                    listener = "handlers.WebSocketHandler"
                 }
             }
         }>

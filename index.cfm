@@ -83,13 +83,9 @@
             })
             .then(response => response.text())
             .then(data => {
-                if (data === "true") {
-                    document.getElementById("authModal").style.display = "none"; // Скрыть модальное окно
-                    showAuthenticatedContent(); // Показать контент для авторизованных пользователей
-                    location.reload(); // Перезагрузить страницу после успешной авторизации
-                } else {
-                    alert("Authorization failed. Please try again.");
-                }
+                document.getElementById("authModal").style.display = "none";
+                showAuthenticatedContent();
+                location.reload();
             });
         }
 

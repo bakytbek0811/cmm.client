@@ -46,7 +46,7 @@
             fetch('http://94.247.135.81:8500/rest/api/messages/send', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json; charset=UTF-8'
                 },
                 body: JSON.stringify({ content: message })
             })

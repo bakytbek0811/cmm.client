@@ -1,15 +1,23 @@
 <cfcomponent rest="true" restPath="auth">
     <cffunction name="checkAuth" httpMethod="GET" restPath="check-auth" access="remote" returnType="boolean">
         <cftry>
-            <cfset jwt = new lib.jwt.models.jwt()>
             <cfset headers = getHTTPRequestData().headers>
 
             <cfif structKeyExists(headers, "Cookie")>
                 <cfset token = headers["Cookie"]>
                 <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
 
-                <cfset jwtToken = jwt.decode(token, "secret-key", ["HS256"])>
-                <cfreturn true>
+                <cfscript>
+                    jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
+
+                    tokenData = jedis.get("cmm:accessToken:" & token);
+                    jedis.close();
+
+                    if (tokenData) {
+                        return true;
+                    }
+
+                </cfscript>
             </cfif>
 
             <cfreturn false>
@@ -36,14 +44,15 @@
             RETURNING *
         </cfquery>
 
-        <cfset var payload = {
-                "sub" = user.id,
-                "iat" = Now()
-            }>
+        <cfset jwtToken = "">
 
-        <cfset jwt = new lib.jwt.models.jwt()>
+        <cfscript>
+            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
-        <cfset jwtToken = jwt.encode(payload, "secret-key", "HS256")>
+            jedis.set("cmm:accessToken:" & token, user.id);
+
+            jedis.close();
+        </cfscript>
 
         <cfcookie  name="accessToken" value="#jwtToken#">
 

@@ -60,22 +60,19 @@
 
         <cfset jwt = new lib.jwt.models.jwt()>
         <cfset headers = getHTTPRequestData().headers>
-        
-        <cftry>
-            <cfif structKeyExists(headers, "Cookie")>
-                <cfset token = headers["Cookie"]>
-                <cfset token = replace(token, "ACCESSTOKEN=", "", "one")>
 
-                <cfset jwtData = jwt.decode(token, "secret-key", ["HS256"])>
-                <cfset fromUserId = jwtData.sub>
-            </cfif>            
-        <cfcatch>
-            <cfreturn {
-                status: 401,
-                message: "Unauthorized."
-            }>
-        </cfcatch>
-        </cftry>
+        <cfscript>
+            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
+
+            fromUserId = jedis.get("cmm:accessToken:" & token);
+
+            if (!fromUserId) {
+                return {
+                    status: 401,
+                    message: "Unauthorized."
+                };
+            }
+        </cfscript>
 
         <cfquery name="message" dataSource="chatMainDb">
             INSERT INTO messages (content, original_content, from_user_id, created_at)

@@ -5,6 +5,17 @@
 
     <cffunction  name="onStartApplication" returntype="boolean" output="false">
         <cfset initRestApplication("./api/v1/controllers", "api")>
+
+        <cfset wsConfig = {
+            channels = {
+                chatChannel = {
+                    listener = "handlers.WebSocketHandler" <!-- Путь к вашему WebSocketHandler.cfc -->
+                }
+            }
+        }>
+        <cfset application.wsConfig = wsConfig>
+        <cfset APPLICATION.connectedClients = {}>
+        
         <cfreturn true>
     </cffunction>
 </cfcomponent>

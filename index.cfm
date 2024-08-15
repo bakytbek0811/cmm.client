@@ -43,10 +43,10 @@
                 return alert("Empty message")
             }
 
-            fetch('http://localhost:8500/rest/api/messages/send', {
+            fetch('http://94.247.135.81:8500/rest/api/messages/send', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json; charset=UTF-8'
                 },
                 body: JSON.stringify({ content: message })
             })
@@ -74,7 +74,7 @@
         }
 
         function displayAllMessages() {
-            fetch('http://localhost:8500/rest/api/messages?limit=999999', {
+            fetch('http://94.247.135.81:8500/rest/api/messages?limit=999999', {
                 method: 'GET'
             })
             .then(data => data.json())
@@ -101,21 +101,21 @@
             });
         }
 
-        let socket = new WebSocket("ws://localhost:8585/cfusion/websocket/chatChannel");
+        let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
 
         socket.onmessage = function(event) {
             const messagesList = document.getElementById("messagesList");
             const messageData = JSON.parse(event.data);
             console.log(messageData)
 
-            // let existingMessage = document.getElementById(messageData.id);
+            let existingMessage = document.getElementById(messageData.id);
 
-            // if (existingMessage) {
-            //     existingMessage.querySelector('p:last-child').textContent = messageData.content;
-            // } else {
-            //     messagesList.appendChild(getMessageHtml(messageData));
-            // }
-            // scrollToMessagesListBottom()
+            if (existingMessage) {
+                existingMessage.querySelector('p:last-child').textContent = messageData.content;
+            } else {
+                messagesList.appendChild(getMessageHtml(messageData));
+            }
+            scrollToMessagesListBottom()
         }
 
         socket.onopen = () => console.log("Connection established");

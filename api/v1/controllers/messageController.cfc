@@ -122,13 +122,6 @@
                 "createdAt" = message.created_at
             })>
 
-        <cfscript>
-            WebSocketClient = createObject("java", "org.java_websocket.client.WebSocketClient");
-            URI = createObject("java", "java.net.URI").init("ws://localhost:8585/cfusion/websocket/chatChannel");
-            Client = WebSocketClient.init(URI);
-            Client.connect();
-            Client.send(messageData);
-            Client.close();
-        </cfscript>
+        <cfreturn data>
     </cffunction>
 </cfcomponent>

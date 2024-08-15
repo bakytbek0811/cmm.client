@@ -123,6 +123,8 @@
             })
             .then(data => {
                 document.getElementById("messageInput").value = "";
+
+                displayAllMessages();
             });
         }
 

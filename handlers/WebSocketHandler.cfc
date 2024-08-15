@@ -18,16 +18,4 @@
         </cfloop>
     </cffunction>
 
-    <cffunction name="onMessage">
-        <cfargument name="wsEvent" type="struct">
-
-        <!-- Логирование полученного сообщения -->
-        <cfset writeLog(file="websocket", text="Received message: " & wsEvent.data)>
-
-        <!-- Отправка сообщения всем подключенным клиентам -->
-        <cfloop collection="#APPLICATION.connectedClients#" item="key">
-            <cfset wsSendMessage(APPLICATION.connectedClients[key], wsEvent.data)>
-        </cfloop>
-    </cffunction>
-
 </cfcomponent>

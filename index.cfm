@@ -27,6 +27,7 @@
             align-items: center;
         }
         input[type="text"] {
+            width: 100%;
             flex-grow: 1;
             padding: 10px;
             margin-right: 10px;
@@ -63,7 +64,7 @@
          function showAuthenticatedContent() {
             const elements = document.querySelectorAll('.authenticated');
             elements.forEach(element => {
-                element.style.display = 'block';
+                element.style.display = 'flex';
             });
         }
 

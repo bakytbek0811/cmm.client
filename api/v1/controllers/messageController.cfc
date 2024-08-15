@@ -49,7 +49,7 @@
 
     <cffunction httpMethod="POST" name="sendMessage" restPath="/send" access="remote" returnType="any" produces="application/json">
         <cfset httpRequestData = getHTTPRequestData()>
-        <cfset data = deserializeJSON(CharsetEncode(httpRequestData.content, "utf-8"))>
+        <cfset data = deserializeJSON(httpRequestData.content)>
 
         <cfset SetTimeZone("UTC")>
 

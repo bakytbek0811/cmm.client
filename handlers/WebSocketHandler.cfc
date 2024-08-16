@@ -1,21 +1,22 @@
 <cfcomponent output="false">
-
-    <cffunction name="onOpen">
+    <cffunction name="onWSOpen">
         <cfargument name="wsEvent" type="struct">
-        <cfset var clientId = createUUID()>
-        <cfset APPLICATION.connectedClients[clientId] = wsEvent.session>
-        <cfset writeLog(file="websocket", text="Client connected: " & clientId)>
+        <cfset APPLICATION.connectedClients[wsEvent.wsSession] = wsEvent.wsSession>
     </cffunction>
 
-    <cffunction name="onClose">
+    <cffunction name="onWSClose">
         <cfargument name="wsEvent" type="struct">
-        <cfloop collection="#APPLICATION.connectedClients#" item="key">
-            <cfif APPLICATION.connectedClients[key] eq wsEvent.session>
-                <cfset structDelete(APPLICATION.connectedClients, key)>
-                <cfset writeLog(file="websocket", text="Client disconnected: " & key)>
-                <cfbreak>
-            </cfif>
+        <cfset structDelete(APPLICATION.connectedClients, wsEvent.wsSession)>
+    </cffunction>
+
+    <cffunction name="onWSMessage">
+        <cfargument name="wsEvent" type="struct">
+        <!-- Логируем сообщение -->
+        <cfset writeLog(file="websocket", text="Received message: " & wsEvent.data)>
+        
+        <!-- Отправляем сообщение всем подключенным клиентам -->
+        <cfloop collection="#APPLICATION.connectedClients#" item="session">
+            <cfset wsSendMessage(session, wsEvent.data)>
         </cfloop>
     </cffunction>
-
 </cfcomponent>

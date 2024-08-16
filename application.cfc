@@ -1,5 +1,5 @@
 <cfcomponent output="false">
-    <cfset this.name = "ChatApp";>
+    <cfset this.name = "ChatApp">
 
     <cfset SetTimeZone("UTC")>
 

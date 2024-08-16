@@ -11,11 +11,7 @@
     }]>
 
     <cffunction  name="onStartApplication" returntype="boolean" output="false">
-        <cfset initRestApplication("./api/v1/controllers", "api")>
-
-        <cfset application.wsConfig = wsConfig>
-        <cfset APPLICATION.connectedClients = {}>
-        
+        <cfset initRestApplication("./api/v1/controllers", "api")>        
         <cfreturn true>
     </cffunction>
 </cfcomponent>

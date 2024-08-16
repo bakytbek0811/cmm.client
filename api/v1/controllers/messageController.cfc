@@ -149,7 +149,11 @@
                 "createdAt" = message.created_at
             })>
 
-        <cfset wsPublish("chatChannel", "Hello, test!")>
+        <cfscript>
+            wsHandler = new handlers.WebSocketHandler();
+                        
+            wsHandler.broadcastMessage("Hello from server");
+        </cfscript>
 
         <cfreturn data>
     </cffunction>

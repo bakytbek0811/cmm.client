@@ -5,7 +5,7 @@
 
         <cfset writeLog(file="websocket", text="Broadcasting message: " & arguments.message)>
 
-        <cfset wsSendMessage(channel="chatChannel", message=arguments.message)>
+        
     </cffunction>
 
 </cfcomponent>

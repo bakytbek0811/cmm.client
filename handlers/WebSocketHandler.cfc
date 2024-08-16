@@ -14,13 +14,13 @@
 
     <cffunction name="onWSMessage">
         <cfargument name="wsEvent" type="struct">
-        <!-- Логируем сообщение -->
+
         <cfset writeLog(file="websocket", text="Received message: " & wsEvent.data)>
+
+        <cfset wsEvent.data = serializeJSON(wsEvent.data)>
         
-        <!-- Отправляем сообщение всем подключенным клиентам -->
         <cfloop collection="#APPLICATION.connectedClients#" item="session">
-            <!-- Отправляем сообщение текущей сессии -->
-            <cfset wsSendMessage(APPLICATION.connectedClients[session], wsEvent.data)>
+            <cfset wsSendMessage(APPLICATION.connectedClients[session])>
         </cfloop>
     </cffunction>
 

@@ -149,6 +149,8 @@
                 "createdAt" = message.created_at
             })>
 
+        <cfset wsSendMessage(messageData)>
+
         <cfreturn data>
     </cffunction>
 </cfcomponent>

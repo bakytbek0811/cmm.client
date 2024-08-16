@@ -149,7 +149,7 @@
                 "createdAt" = message.created_at
             })>
 
-        <cfset wsPublish("chatChannel", messageData)>
+        <cfset wsPublish("chatChannel", "Hello, test!")>
 
         <cfreturn data>
     </cffunction>

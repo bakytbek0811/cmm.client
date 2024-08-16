@@ -6,7 +6,8 @@
     <cfset this.mappings["/lib"] = "/opt/cmm.client/lib">
 
     <cfset this.wschannels = [{
-        name = "chatChannel" 
+        name = "chatChannel",
+        cfclistener = "handlers.WebSocketHandler" 
     }]>
 
     <cffunction  name="onStartApplication" returntype="boolean" output="false">

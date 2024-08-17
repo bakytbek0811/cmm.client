@@ -174,7 +174,7 @@
         }
 
         function startLoadingMessagesWithInterval() {
-            setInterval(() => displayAllMessages(false), 5000)
+            setInterval(() => displayAllMessages(false), 2500)
         }
 
         checkAuth();

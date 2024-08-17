@@ -139,18 +139,5 @@
                 }
             }
         </cfscript>
-
-        <cfset messageData = serializeJSON({
-                "id" = message.id,
-                "user" = {
-                    "id" = message.from_user_id,
-                    "username" = "Bakytbek"
-                },
-                "createdAt" = message.created_at
-            })>
-
-        <cfset wsPublish(channel="chatChannel", message="Hello from server")>
-
-        <cfreturn data>
     </cffunction>
 </cfcomponent>

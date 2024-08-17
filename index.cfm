@@ -86,8 +86,7 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById("authModal").style.display = "none";
-                showAuthenticatedContent();
-                displayAllMessages();
+                window.location.reload();
             });
         }
 
@@ -101,8 +100,8 @@
                     document.getElementById("authModal").style.display = "block";
                 } else {
                     displayAllMessages();
-                    initWebSocket();
                     showAuthenticatedContent();
+                    startLoadingMessagesWithInterval();
                 }
             });
         }
@@ -146,7 +145,7 @@
             return messageElement;
         }
 
-        function displayAllMessages() {
+        function displayAllMessages(isFirstLoad = true) {
             fetch('http://94.247.135.81:8500/rest/api/messages?limit=999999', {
                 method: 'GET'
             })
@@ -161,7 +160,9 @@
                     messagesList.appendChild(getMessageHtml(message));
                 }
 
-                scrollToMessagesListBottom();
+                if (isFirstLoad) {
+                    scrollToMessagesListBottom();
+                }
             });
         }
 
@@ -172,33 +173,8 @@
             });
         }
 
-        function initWebSocket() {
-            let socket = new WebSocket("ws://94.247.135.81:8585/cfusion/websocket/chatChannel");
-
-            socket.onmessage = function(event) {
-                console.log("Message received: " + event.data);
-                const messageData = JSON.parse(event.data);
-
-                let existingMessage = document.getElementById(messageData.id);
-
-                if (existingMessage) {
-                    existingMessage.querySelector('p:last-child').textContent = messageData.content;
-                } else {
-                    const messagesList = document.getElementById("messagesList");
-                    
-                    messagesList.appendChild(getMessageHtml(messageData));
-                }
-                scrollToMessagesListBottom();
-            };
-
-            socket.onopen = () => {
-                console.log("Connection established")
-                socket.send(JSON.stringify({ type: "message", content: "Hello" }));
-            };
-
-            socket.onerror = (error) => {
-                console.error("WebSocket error:", error);
-            };
+        function startLoadingMessagesWithInterval() {
+            setInterval(() => displayAllMessages(false), 5000)
         }
 
         checkAuth();

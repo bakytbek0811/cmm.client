@@ -16,6 +16,7 @@
         <cfset httpRequestData = getHTTPRequestData()>
         <cfset data = deserializeJSON(httpRequestData.content)>
         <cfset tokenService = new services.tokenService()>
+        <cfset redisService = new services.redisService()>
 
         <cfset SetTimeZone("UTC")>
 
@@ -32,12 +33,8 @@
 
         <cfscript>
             jwtToken = tokenService.generateRandomToken(20);
-            
-            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
-            jedis.set("cmm:accessToken:" & jwtToken, user.id);
-
-            jedis.close();
+            redisService.setData("cmm:accessToken:" & jwtToken, user.id);
         </cfscript>
 
         <cfcookie  name="accessToken" value="#jwtToken#">

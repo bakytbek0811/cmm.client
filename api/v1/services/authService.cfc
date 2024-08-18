@@ -12,10 +12,10 @@
             </cfif>
         </cfloop>
 
-        <cfscript>
-            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
+        <cfset redisService = new services.redisService()>
 
-            fromUserId = jedis.get("cmm:accessToken:" & token);
+        <cfscript>
+            fromUserId = redisService.getData("cmm:accessToken:" & token);
 
             if (fromUserId > 0) {
                 return fromUserId;

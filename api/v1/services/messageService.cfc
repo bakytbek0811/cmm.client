@@ -1,7 +1,5 @@
 <cfcomponent output="false">
-    <cffunction name="getMessagesWithUser" access="public" returnType="any">
-        <cfset SetTimeZone("UTC")>
-        
+    <cffunction name="getMessagesWithUser" access="public" returnType="any">        
         <cfargument name="page" type="numeric" required="true">
         <cfargument name="size" type="numeric" required="true">
 
@@ -31,7 +29,7 @@
         <cfset var result = []>
 
         <cfloop query="messages">
-            <cfset messageData = {
+            <cfset arrayAppend(result, {
                 "id" = messages.id,
                 "content" = messages.content,
                 "createdAt" = messages.created_at,
@@ -39,9 +37,7 @@
                     "id" = messages.from_user_id,
                     "username" = messages.username
                 }
-            }>
-
-            <cfset arrayAppend(result, messageData)>
+            })>
         </cfloop>
 
         <cfreturn result>

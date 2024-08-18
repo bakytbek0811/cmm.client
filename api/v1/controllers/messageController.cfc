@@ -2,8 +2,12 @@
     <cffunction httpMethod="GET" name="getMessages" restPath="/" access="remote" returnType="any" produces="application/json">
         <cfargument name="page" type="numeric" required="false" restArgSource="query" default="1">
         <cfargument name="size" type="numeric" required="false" restArgSource="query" default="50">
+
+        <cfset SetTimeZone("UTC")>
+
+        <cfset messageService = new services.messageService()>
         
-        <cfreturn new services.messageService().getMessagesWithUser(arguments.page, arguments.size)>
+        <cfreturn messageService.getMessagesWithUser(arguments.page, arguments.size)>
     </cffunction>
 
     <cffunction httpMethod="POST" name="sendMessage" restPath="/send" access="remote" returnType="any" produces="application/json">

@@ -82,12 +82,21 @@
 
         <cfset fromUserId = authService.getUserIdFromToken()>
 
-        <cfreturn fromUserId>
-        
         <cfif fromUserId eq 0>
             <cfheader statusCode="401" statusText="Unauthorized.">
             <cfthrow message="Unauthorized" type="UnauthorizedException">
         </cfif>
+
+        <cfquery name="message" dataSource="chatMainDb">
+            INSERT INTO messages (content, original_content, from_user_id, created_at)
+            VALUES (
+                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#fromUserId#" cfsqltype="cf_sql_integer">,
+                now()
+            )
+            RETURNING *
+        </cfquery>
 
         <cfset responseMessage = "">
 

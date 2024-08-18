@@ -3,11 +3,11 @@
         <cfargument name="key" required="true" type="string">
 
         <cfscript>
-            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
+            redis = getReids();
 
-            data = jedis.get(arguments.key);
-            
-            jedis.close();
+            data = redis.get(arguments.key);
+
+            redis.close();
 
             return data;
         </cfscript>
@@ -18,11 +18,19 @@
         <cfargument name="value" required="true" type="string">
 
         <cfscript>
+            redis = getReids();
+
+            redis.set(arguments.key, arguments.value);
+
+            redis.close();
+        </cfscript>
+    </cffunction>
+
+    <cffunction name="getRedis" returnType="any" access="public">
+        <cfscript>
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 
-            jedis.set(arguments.key, arguments.value);
-
-            jedis.close();
+            return jedis;
         </cfscript>
     </cffunction>
 </cfcomponent>

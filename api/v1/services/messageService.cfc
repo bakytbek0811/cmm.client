@@ -42,4 +42,22 @@
 
         <cfreturn result>
     </cffunction>
+
+    <cffunction name="saveMessage" access="public" returnType="any">
+        <cfargument name="content" type="string" required="true">
+        <cfargument name="fromUserId" type="numeric" required="true">
+
+        <cfquery name="message" dataSource="chatMainDb">
+            INSERT INTO messages (content, original_content, from_user_id, created_at)
+            VALUES (
+                <cfqueryparam value="#arguments.content#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#arguments.content#" cfsqltype="cf_sql_varchar">,
+                <cfqueryparam value="#arguments.fromUserId#" cfsqltype="cf_sql_integer">,
+                now()
+            )
+            RETURNING *
+        </cfquery>
+
+        <cfreturn message>
+    </cffunction>
 </cfcomponent>

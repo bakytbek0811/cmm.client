@@ -17,24 +17,15 @@
         <cfset SetTimeZone("UTC")>
 
         <cfif NOT structKeyExists(data, "content")>
-            <cfheader statusCode="404" statusText="Bad request.">
-            <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
+            <cfthrow message="Missing required parameter: content" type="InvalidRequestException" statusCode="400" statusText="Bad request.">
         </cfif>
 
         <cfset authService = new services.authService()>
 
         <cfset fromUserId = authService.getUserIdFromToken()>
 
-        <cfquery name="message" dataSource="chatMainDb">
-            INSERT INTO messages (content, original_content, from_user_id, created_at)
-            VALUES (
-                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#fromUserId#" cfsqltype="cf_sql_integer">,
-                now()
-            )
-            RETURNING *
-        </cfquery>
+        <cfset messageService = new services.messageService()>
+        <cfset message = messageService.saveMessage(data.content, fromUserId)>
 
         <cfset new services.policyFilterService().sendMessageToQueueForPolicyCheck(message)>
     </cffunction>

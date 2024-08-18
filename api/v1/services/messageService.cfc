@@ -28,7 +28,7 @@
                 <cfqueryparam value="#offset#" cfsqltype="cf_sql_integer">
         </cfquery>
 
-        <cfset result = []>
+        <cfset var result = []>
 
         <cfloop query="messages">
             <cfset messageData = {

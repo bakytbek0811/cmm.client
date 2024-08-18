@@ -28,5 +28,7 @@
         <cfset message = messageService.saveMessage(data.content, fromUserId)>
 
         <cfset new services.policyFilterService().sendMessageToQueueForPolicyCheck(message)>
+
+        <cfset wsPublish("chatChannel", message)/>
     </cffunction>
 </cfcomponent>

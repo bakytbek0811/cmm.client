@@ -82,6 +82,13 @@
 
         <cfset fromUserId = authService.getUserIdFromToken()>
 
+        <cfreturn fromUserId>
+        
+        <cfif fromUserId eq 0>
+            <cfheader statusCode="401" statusText="Unauthorized.">
+            <cfthrow message="Unauthorized" type="UnauthorizedException">
+        </cfif>
+
         <cfset responseMessage = "">
 
         <cfscript>

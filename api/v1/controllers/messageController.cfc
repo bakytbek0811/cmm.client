@@ -78,40 +78,9 @@
             <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
         </cfif>
 
-        <cfset headers = getHTTPRequestData().headers>
+        <cfset authService = new services.authService()>
 
-        <cfset token = "">
-
-        <cfset cookieString = headers["Cookie"]>
-        <cfset cookieParts = listToArray(cookieString, "; ")>
-
-        <cfloop array="#cookieParts#" index="part">
-            <cfif left(part, 12) eq "ACCESSTOKEN=">
-                <cfset token = replace(part, "ACCESSTOKEN=", "", "one")>
-                <cfbreak>
-            </cfif>
-        </cfloop>
-
-        <cfset fromUserId = 0>
-        
-        <cfscript>
-            jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
-
-            fromUserId = jedis.get("cmm:accessToken:" & token);
-
-            return "";
-        </cfscript>
-
-        <cfquery name="message" dataSource="chatMainDb">
-            INSERT INTO messages (content, original_content, from_user_id, created_at)
-            VALUES (
-                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#data.content#" cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value="#fromUserId#" cfsqltype="cf_sql_integer">,
-                now()
-            )
-            RETURNING *
-        </cfquery>
+        <cfset fromUserId = authService.getUserIdFromToken()>
 
         <cfset responseMessage = "">
 

@@ -17,7 +17,7 @@
         <cfset SetTimeZone("UTC")>
 
         <cfif NOT structKeyExists(data, "content")>
-            <cfthrow message="Missing required parameter: content" type="InvalidRequestException" statusCode="400" statusText="Bad request.">
+            <cfthrow message="Missing required parameter: content" type="InvalidRequestException">
         </cfif>
 
         <cfset authService = new services.authService()>

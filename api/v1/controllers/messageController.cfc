@@ -99,12 +99,7 @@
 
             fromUserId = jedis.get("cmm:accessToken:" & token);
 
-            if (!fromUserId || fromUserId == 0) {
-                return {
-                    status: 401,
-                    message: "Unauthorized."
-                };
-            }
+            return "";
         </cfscript>
 
         <cfquery name="message" dataSource="chatMainDb">

@@ -3,7 +3,7 @@
         <cfargument name="key" required="true" type="string">
 
         <cfscript>
-            redis = getReids();
+            redis = getRedis();
 
             data = redis.get(arguments.key);
 
@@ -18,7 +18,7 @@
         <cfargument name="value" required="true" type="string">
 
         <cfscript>
-            redis = getReids();
+            redis = getRedis();
 
             redis.set(arguments.key, arguments.value);
 

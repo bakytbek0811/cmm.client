@@ -98,6 +98,8 @@
             RETURNING *
         </cfquery>
 
+        <cfset responseMessage = "">
+
         <cfscript>
             try {
                 // rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
@@ -141,5 +143,7 @@
                 }
             }
         </cfscript>
+
+        <cfreturn responseMessage>
     </cffunction>
 </cfcomponent>

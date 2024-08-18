@@ -1,4 +1,24 @@
-<cfcomponent rest="true" restPath="/messages">
+<cfcomponent rest="true" restPath="/messages" output="false">
+    <cfset variables.redis = "" />
+    <cfset variables.rabbitChannel = "" />
+
+    <cffunction name="init" returntype="void" access="public" output="false">
+        <cfscript>
+            variables.redis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
+        </cfscript>
+
+        <cfscript>
+            rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
+            connectionFactory = rabbitFactory.init();
+            connectionFactory.setHost("94.247.135.81");
+            connectionFactory.setUsername("guest");
+            connectionFactory.setPassword("guest");
+
+            rabbitConnection = connectionFactory.newConnection();
+            variables.rabbitChannel = rabbitConnection.createChannel();
+        </cfscript>
+    </cffunction>
+    
     <cffunction httpMethod="GET" name="getMessages" restPath="/" access="remote" returnType="any" produces="application/json">
         <cfargument name="page" type="numeric" required="false" restArgSource="query" default="1">
         <cfargument name="size" type="numeric" required="false" restArgSource="query" default="50">
@@ -122,7 +142,7 @@
                     "createdAt" = isoDate
                 }).getBytes("UTF-8");
 
-                application.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
+                variables.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
                 
                 // channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
 

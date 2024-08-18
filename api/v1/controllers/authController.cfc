@@ -12,10 +12,10 @@
         </cftry>
     </cffunction>
 
-
     <cffunction httpMethod="POST" name="login" restPath="login" access="remote" returnType="any" produces="application/json">
         <cfset httpRequestData = getHTTPRequestData()>
         <cfset data = deserializeJSON(httpRequestData.content)>
+        <cfset tokenService = new services.tokenService()>
 
         <cfset SetTimeZone("UTC")>
 
@@ -31,18 +31,7 @@
         <cfset jwtToken = "">
 
         <cfscript>
-            function generateRandomToken(len) {
-                var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var token = "";
-                
-                for (var i = 1; i <= len; i++) {
-                    token &= characters.charAt(randRange(1, len(characters)) - 1);
-                }
-                
-                return token;
-            }
-
-            jwtToken = generateRandomToken(20);
+            jwtToken = tokenService.generateRandomToken(20);
             
             jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
 

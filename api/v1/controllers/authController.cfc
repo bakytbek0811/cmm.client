@@ -20,14 +20,7 @@
 
         <cfset SetTimeZone("UTC")>
 
-        <cfquery name="user" datasource="chatMainDb">
-            INSERT INTO users (username, registration_date) 
-            VALUES (
-                <cfqueryparam value="#data.username#" cfsqltype="cf_sql_varchar">,
-                now()
-            )
-            RETURNING *
-        </cfquery>
+        <cfset user = new services.userService().getUserByUsername(data.username)>
 
         <cfset jwtToken = "">
 

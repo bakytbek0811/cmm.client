@@ -1,24 +1,4 @@
 <cfcomponent rest="true" restPath="/messages" output="false">
-    <cfset variables.redis = "" />
-    <cfset variables.rabbitChannel = "" />
-
-    <cffunction name="init" returntype="void" access="public" output="false">
-        <cfscript>
-            variables.redis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
-        </cfscript>
-
-        <cfscript>
-            rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
-            connectionFactory = rabbitFactory.init();
-            connectionFactory.setHost("94.247.135.81");
-            connectionFactory.setUsername("guest");
-            connectionFactory.setPassword("guest");
-
-            rabbitConnection = connectionFactory.newConnection();
-            variables.rabbitChannel = rabbitConnection.createChannel();
-        </cfscript>
-    </cffunction>
-    
     <cffunction httpMethod="GET" name="getMessages" restPath="/" access="remote" returnType="any" produces="application/json">
         <cfargument name="page" type="numeric" required="false" restArgSource="query" default="1">
         <cfargument name="size" type="numeric" required="false" restArgSource="query" default="50">
@@ -93,50 +73,6 @@
             RETURNING *
         </cfquery>
 
-        <cfset responseMessage = "">
-
-        <cfscript>
-            try {
-                rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
-                connectionFactory = rabbitFactory.init();
-                connectionFactory.setHost("94.247.135.81");
-                connectionFactory.setUsername("guest");
-                connectionFactory.setPassword("guest");
-
-                connection = connectionFactory.newConnection();
-                channel = connection.createChannel();
-                queueName = "chat-message-policy-filter-queue";
-
-                isoDate = DateTimeFormat(message.created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'");
-
-                byteArray = serializeJSON({
-                    "id" = message.id,
-                    "content" = message.content,
-                    "originalContent" = message.original_content,
-                    "fromUserId" = message.from_user_id,
-                    "createdAt" = isoDate
-                }).getBytes("UTF-8");
-                
-                channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
-
-                responseMessage = "OK";
-            } catch (any e) {
-                var errorMessage = "Error: " & e.message;
-                if (isDefined("e.stackTrace")) {
-                    errorMessage &= "<br>Stack Trace: " & e.stackTrace;
-                }
-
-                responseMessage = errorMessage;
-            } finally {
-                if (isDefined("channel") AND isObject(channel)) {
-                    channel.close();
-                }
-                if (isDefined("connection") AND isObject(connection)) {
-                    connection.close();
-                }
-            }
-        </cfscript>
-
-        <cfreturn responseMessage>
+        <cfset new services.policyFilterService().sendMessageToQueueForPolicyCheck(message)>
     </cffunction>
 </cfcomponent>

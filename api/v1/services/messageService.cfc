@@ -1,9 +1,9 @@
 <cfcomponent output="false">
-    <cffunction  name="getMessagesWithUser" access="public" returnType="any">
+    <cffunction name="getMessagesWithUser" access="public" returnType="any">
         <cfset SetTimeZone("UTC")>
         
-        <cfargument name="page" type="numeric" required="false" restArgSource="query" default="1">
-        <cfargument name="size" type="numeric" required="false" restArgSource="query" default="50">
+        <cfargument name="page" type="numeric" required="true">
+        <cfargument name="size" type="numeric" required="true">
 
         <cfset var offset = ((arguments.page - 1) * arguments.size)>
 

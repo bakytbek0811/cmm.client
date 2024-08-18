@@ -1,6 +1,9 @@
 <cfcomponent rest="true" restPath="/messages" output="false">
     <cffunction httpMethod="GET" name="getMessages" restPath="/" access="remote" returnType="any" produces="application/json">
-        <cfreturn new services.messageService().getMessagesWithUser()>
+        <cfargument name="page" type="numeric" required="false" restArgSource="query" default="1">
+        <cfargument name="size" type="numeric" required="false" restArgSource="query" default="50">
+        
+        <cfreturn new services.messageService().getMessagesWithUser(arguments.page, arguments.size)>
     </cffunction>
 
     <cffunction httpMethod="POST" name="sendMessage" restPath="/send" access="remote" returnType="any" produces="application/json">

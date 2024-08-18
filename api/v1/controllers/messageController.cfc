@@ -100,14 +100,14 @@
 
         <cfscript>
             try {
-                rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
-                connectionFactory = rabbitFactory.init();
-                connectionFactory.setHost("94.247.135.81");
-                connectionFactory.setUsername("guest");
-                connectionFactory.setPassword("guest");
+                // rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
+                // connectionFactory = rabbitFactory.init();
+                // connectionFactory.setHost("94.247.135.81");
+                // connectionFactory.setUsername("guest");
+                // connectionFactory.setPassword("guest");
 
-                connection = connectionFactory.newConnection();
-                channel = connection.createChannel();
+                // connection = connectionFactory.newConnection();
+                // channel = connection.createChannel();
                 queueName = "chat-message-policy-filter-queue";
 
                 isoDate = DateTimeFormat(message.created_at, "yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -119,8 +119,10 @@
                     "fromUserId" = message.from_user_id,
                     "createdAt" = isoDate
                 }).getBytes("UTF-8");
+
+                application.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
                 
-                channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
+                // channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
 
                 responseMessage = "OK";
             } catch (any e) {

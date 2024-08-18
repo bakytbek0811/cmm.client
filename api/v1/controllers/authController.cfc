@@ -20,7 +20,8 @@
 
         <cfset SetTimeZone("UTC")>
 
-        <cfset user = new services.userService().getUserByUsername(data.username)>
+        <cfset userService = new services.userService()>
+        <cfset var user = userService.getUserByUsername(data.username)>
 
         <cfset jwtToken = "">
 

@@ -82,11 +82,6 @@
 
         <cfset fromUserId = authService.getUserIdFromToken()>
 
-        <cfif fromUserId eq 0>
-            <cfheader statusCode="401" statusText="Unauthorized.">
-            <cfthrow message="Unauthorized" type="UnauthorizedException">
-        </cfif>
-
         <cfquery name="message" dataSource="chatMainDb">
             INSERT INTO messages (content, original_content, from_user_id, created_at)
             VALUES (
@@ -121,8 +116,6 @@
                     "fromUserId" = message.from_user_id,
                     "createdAt" = isoDate
                 }).getBytes("UTF-8");
-
-                // variables.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
                 
                 channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
 

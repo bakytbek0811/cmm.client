@@ -1,38 +1,11 @@
 <cfcomponent rest="true" restPath="auth">
     <cffunction name="checkAuth" httpMethod="GET" restPath="check-auth" access="remote" returnType="boolean" produces="text/plain">
         <cftry>
-            <cfset headers = getHTTPRequestData().headers>
+            <cfset authService = new services.authService()>
 
-            <cfif structKeyExists(headers, "Cookie")>
-                <cfset cookieString = headers["Cookie"]>
-                <cfset cookieParts = listToArray(cookieString, "; ")>
-
-                <cfset token = "">
-
-                <cfloop array="#cookieParts#" index="part">
-                    <cfif left(part, 12) eq "ACCESSTOKEN=">
-                        <cfset token = replace(part, "ACCESSTOKEN=", "", "one")>
-                        <cfbreak>
-                    </cfif>
-                </cfloop>
-
-                <cfscript>                    
-                    jedis = createObject("java", "redis.clients.jedis.Jedis").init("94.247.135.81", 6370);
-
-                    tokenData = jedis.get("cmm:accessToken:" & token);
-
-                    if (tokenData) {
-                        jedis.close();
-
-                        return true;
-                    }
-
-                    jedis.close();
-                </cfscript>
-            </cfif>
-
-            <cfreturn false>
+            <cfset authService.getUserIdFromToken()>
             
+            <cfreturn true>
         <cfcatch>
             <cfreturn false>
         </cfcatch>

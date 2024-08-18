@@ -21,7 +21,10 @@
                 return fromUserId;
             }
         </cfscript>
-        
-        <cfreturn 0>
+
+        <cfif fromUserId eq 0>
+            <cfheader statusCode="401" statusText="Unauthorized.">
+            <cfthrow message="Unauthorized" type="UnauthorizedException">
+        </cfif>
     </cffunction>
 </cfcomponent>

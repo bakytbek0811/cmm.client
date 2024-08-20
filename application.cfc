@@ -13,7 +13,7 @@
     <cflog  text="Application started" file="application">
 
     <cffunction  name="onApplicationStart" returntype="boolean" output="false">
-        <cflog  text="onApplicationStart" file="application">
+        <cflog  text="onApplicationStart starting..." file="application">
         
         <cfscript>
             rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
@@ -28,6 +28,8 @@
             application.rabbitChannel = channel;
             application.myGlobalVariable = "Some value";
         </cfscript>
+
+        <cflog  text="onApplicationStart end..." file="application">
 
         <cfreturn true>
     </cffunction>

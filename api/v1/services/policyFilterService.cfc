@@ -17,7 +17,7 @@
                 "createdAt" = isoDate
             }).getBytes("UTF-8");
 
-            application.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
+            // application.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
         </cfscript>
     </cffunction>
 </cfcomponent>

@@ -12,7 +12,7 @@
 
     <cflog  text="Application started" file="application">
 
-    <cffunction  name="onApplicationStart" returntype="void" output="false">
+    <cffunction  name="onApplicationStart" returntype="boolean" output="false">
         <cflog  text="onApplicationStart" file="application">
         
         <cfscript>
@@ -28,5 +28,9 @@
             application.rabbitChannel = channel;
             application.myGlobalVariable = "Some value";
         </cfscript>
+
+        <cfreturn true>
     </cffunction>
+
+    <cfset onApplicationStart()>
 </cfcomponent>

@@ -31,6 +31,4 @@
 
         <cfreturn true>
     </cffunction>
-
-    <cfset onApplicationStart()>
 </cfcomponent>

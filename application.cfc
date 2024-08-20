@@ -3,7 +3,7 @@
 
     <cfset SetTimeZone("UTC")>
 
-    <cfset writeLog(text="Application started" file="application")>
+    <cflog  text="Application started" file="application">
 
     <cffunction  name="onApplicationStart" returntype="boolean" output="false">
         <cfset initRestApplication("./api/v1/controllers", "api")>  

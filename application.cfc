@@ -7,6 +7,8 @@
 
     <cffunction  name="onApplicationStart" returntype="boolean" output="false">
         <cfset initRestApplication("./api/v1/controllers", "api")>  
+
+        <cflog  text="onApplicationStart" file="application">
         
         <cfscript>
             rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");

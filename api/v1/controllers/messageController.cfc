@@ -29,4 +29,8 @@
 
         <cfset new services.policyFilterService().sendMessageToQueueForPolicyCheck(message)>
     </cffunction>
+
+    <cffunction name="test" restPath="test" access="remote" returnType="any">
+        <cfreturn application.myGlobalVariable>
+    </cffunction>
 </cfcomponent>

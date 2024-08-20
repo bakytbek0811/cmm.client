@@ -17,6 +17,7 @@
             channel = connection.createChannel();
 
             application.rabbitChannel = channel;
+            application.myGlobalVariable = "Some value";
         </cfscript>
 
         <cfreturn true>

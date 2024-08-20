@@ -4,7 +4,20 @@
     <cfset SetTimeZone("UTC")>
 
     <cffunction  name="onStartApplication" returntype="boolean" output="false">
-        <cfset initRestApplication("./api/v1/controllers", "api")>   
+        <cfset initRestApplication("./api/v1/controllers", "api")>  
+        
+        <cfscript>
+            rabbitFactory = createObject("java", "com.rabbitmq.client.ConnectionFactory");
+            connectionFactory = rabbitFactory.init();
+            connectionFactory.setHost("94.247.135.81");
+            connectionFactory.setUsername("guest");
+            connectionFactory.setPassword("guest");
+
+            connection = connectionFactory.newConnection();
+            channel = connection.createChannel();
+
+            application.rabbitChannel = channel;
+        </cfscript>
 
         <cfreturn true>
     </cffunction>

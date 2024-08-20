@@ -2,7 +2,7 @@
     <cffunction  name="sendMessageToQueueForPolicyCheck" access="public" returnType="void">
         <cfargument name="message" required="true" type="any">
         
-        <cfset channel = new services.rabbitMqService().getChannel()>
+<!---         <cfset channel = new services.rabbitMqService().getChannel()> --->
 
         <cfscript>
             queueName = "chat-message-policy-filter-queue";
@@ -17,7 +17,7 @@
                 "createdAt" = isoDate
             }).getBytes("UTF-8");
 
-            channel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
+            application.rabbitChannel.basicPublish("", queueName, JavaCast("null", 0), byteArray);
         </cfscript>
     </cffunction>
 </cfcomponent>

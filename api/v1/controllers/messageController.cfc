@@ -31,7 +31,6 @@
     </cffunction>
 
     <cffunction name="test" restPath="test" access="remote" returnType="any">
-<!---         <cfreturn application.myGlobalVariable> --->
-        <cfreturn "Hello World">
+        <cfreturn application.myGlobalVariable>
     </cffunction>
 </cfcomponent>
